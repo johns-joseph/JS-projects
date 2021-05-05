@@ -25,8 +25,25 @@ UI.prototype.clearField = ()=> {
     document.getElementById('title').value ='' ;
     document.getElementById('author').value ='' ;
     document.getElementById('isbn').value = ' ';
-    
+
 }
+
+UI.prototype.showAlert = (message,className) => {
+ const div =document.createElement('div');
+ div.className = `alert ${className}` ;
+ div.appendChild(document.createTextNode(message));
+
+ const container = document.querySelector('.container');
+
+ const form = document.querySelector('#book-form');
+
+ container.insertBefore(div, form);
+
+ setTimeout(() => {
+     document.querySelector('.alert').remove();
+ }, 3000);
+}
+
 document.getElementById('book-form').addEventListener('submit' , function(e)
 {
     //form value
@@ -36,9 +53,16 @@ document.getElementById('book-form').addEventListener('submit' , function(e)
 
     const book = new Book(title , author , isbn);
     const ui = new UI();
+   
+    if(title=='' || author == '' || isbn==''){
+        ui.showAlert('Fill all the fields' ,'error')
+    }
+    else{
+        ui.addBookToList(book);
+        ui.clearField();
+    }
+   
 
-    ui.addBookToList(book);
-    ui.clearField();
     console.log(ui);
 
 
